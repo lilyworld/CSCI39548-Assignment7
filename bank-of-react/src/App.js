@@ -11,11 +11,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      accountBalance: 14568.27,
+      accountBalance: 0,
       currentUser: {
         userName: 'joe_shimo',
         memberSince: '07/23/96',
-      }
+      },
+      debits: [],
+      credits: []
     }
   }
 
@@ -32,7 +34,7 @@ class App extends Component {
     );
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
     const DebitsComponent = () => (<Debits/>)
-    const CreditsComponent = () => (<Credits/>)
+    const CreditsComponent = () => (<Credits accountBalance={this.state.accountBalance}/>)
 
     return (
         <Router>
