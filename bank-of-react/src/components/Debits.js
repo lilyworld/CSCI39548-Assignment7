@@ -9,6 +9,7 @@ class Debits extends Component {
         super(props)
         this.state =
         {
+            debitSum: 0,
             description: "",
             amount: null,
             date: "",
@@ -17,16 +18,13 @@ class Debits extends Component {
     }
 
     componentDidMount = async () => {
-        let ApiResponse = await axios.get("https://moj-api.herokuapp.com/debits");
-        try {
-            this.setState({ userData: ApiResponse.data })
-        }
-        catch (error) {
-            if (error.response) {
-                console.log("Error Data: ", error.ApiResponse.data); //Not found
-                console.log("Error Status: ", error.ApiResponse.status); //404
-            }
-        }
+        let debits = await axios.get("https://moj-api.herokuapp.com/debits");
+        debits = debits.data
+        let sum = 0;
+        debits.forEach((debit)=>{
+            sum += debit.amount
+        })
+        this.setState({debits, debitSum: sum});
     }
 
     handleAmount = (event) => {
@@ -38,10 +36,32 @@ class Debits extends Component {
         }
     }
 
+    makeTable = (debits) =>{
+        let table = [];
+        console.log("entered table");
+        console.log(debits);
+        for(let i = 0; i < debits.length; i++)
+        {
+            table.push(
+                <tbody>
+                    <tr key={debits[i].id}>
+                        <td>
+                            <ul>
+                                <td><b>{debits[i].description}</b></td>
+                                <p>Amount: ${debits[i].amount}</p>
+                                <p>Date: {debits[i].date}</p>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            );
+        }
+        return table;
+    }
+
     addDebit = (event) => {
         const debitInfo = this.state.debits;
         const Balance = this.props.accountBalance - parseInt(this.state.amount);
-        this.props.updateBalance(Balance);
 
         const date = new Date().toLocaleDateString("en-US");
         this.setState({ date });
