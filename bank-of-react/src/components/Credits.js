@@ -7,8 +7,7 @@ class Credits extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            credits: [],
-            creditSum: 0
+            credits: []
         }
     }
 
@@ -44,6 +43,10 @@ class Credits extends Component {
             );
         }
         return table;
+    }
+
+    onClick = (credits) => {
+
     }
 
     render() {
