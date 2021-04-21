@@ -7,7 +7,10 @@ class Credits extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            credits: []
+            credits: [],
+            // description: "",
+            // amount: 0,
+            // date: "",
         }
     }
 
@@ -20,7 +23,7 @@ class Credits extends Component {
             sum += credit.amount
         })
 
-        this.setState({credits, creditSum: sum});
+        this.setState({credits, creditBalance: sum});
     }
 
     makeTable = (credits) => {
@@ -45,8 +48,17 @@ class Credits extends Component {
         return table;
     }
 
-    onClick = (credits) => {
+    onClick = (event) => {
+        event.preventDefault();
+        const creditInfo = this.state.credits;
+        const Balance = this.props.accountBalance - parseInt(this.state.amount);
 
+        const date = new Date().toLocaleDateString("en-US");
+        this.setState({ date });
+
+        creditInfo.unshift({ description: this.state.description, amount: this.state.amount, date });
+
+        this.setState({ credits: creditInfo });
     }
 
     render() {
@@ -57,7 +69,11 @@ class Credits extends Component {
                 <div className="App-header">
                     <h1>Credits</h1>
                     <AccountBalance accountBalance={this.props.accountBalance}/>
-                    <p>Credit Balance: {this.state.creditSum}</p>
+                    <form>
+                        <input type="text" value={this.state.description} onChange={this.handleDescription} placeholder="Enter Description"></input>
+                        <input type="number" value={this.state.amount} onChange={this.handleAmount} placeholder="Enter Amount"></input>
+                        <button className="add-credit" onClick={this.addCredit}>Add Credit</button>
+                    </form>
                 </div>
                 <br/>
                 <table id="data">
