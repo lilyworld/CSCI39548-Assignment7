@@ -15,6 +15,12 @@ class App extends Component {
         memberSince: '07/23/96',
       }
     }
+
+    mockLogIn = (logInInfo) => {
+      const newUser = {...this.state.currentUser}
+      newUser.userName = logInInfo.userName
+      this.setState({currentUser: newUser})
+    }
   }
 
   render() {
@@ -23,12 +29,14 @@ class App extends Component {
     const UserProfileComponent = () => (
         <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince}  />
     );
+    const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
 
     return (
         <Router>
           <div>
             <Route exact path="/" render={HomeComponent}/>
             <Route exact path="/userProfile" render={UserProfileComponent}/>
+            <Route exact path="/login" render={LogInComponent}/>
           </div>
         </Router>
     );
