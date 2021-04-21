@@ -58,9 +58,9 @@ class Debits extends Component {
     }
 
     addDebit = (event) => {
+        event.preventDefault();
         const debitInfo = this.state.debits;
         const Balance = this.props.accountBalance - parseInt(this.state.amount);
-
         const date = new Date().toLocaleDateString("en-US");
         this.setState({ date });
 
@@ -76,6 +76,8 @@ class Debits extends Component {
             <div>
                 <h1>Debits</h1>
                 <AccountBalance accountBalance={this.props.accountBalance} />
+                <p>Debit Balance: {this.state.debitSum}</p>
+
                 <br />
                 <form>
                     <input type="text" value={this.state.description} onChange={this.handleDescription} placeholder="Enter Description"></input>
