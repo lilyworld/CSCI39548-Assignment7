@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import AccountBalance from "./AccountBalance";
-import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 class Debits extends Component {
 
@@ -17,31 +17,29 @@ class Debits extends Component {
         }
     }
 
+    //function for what happens when you input the description
+    handleDescription = (event) => {
+        this.setState({ description: event.target.value });
+    }
+    handleAmount = (event) => {
+        this.setState({ amount: event.target.value });
+    }
+
     componentDidMount = async () => {
         let debits = await axios.get("https://moj-api.herokuapp.com/debits");
         debits = debits.data
         let sum = 0;
-        debits.forEach((debit)=>{
+        debits.forEach((debit) => {
             sum += debit.amount
         })
-        this.setState({debits, debitSum: sum});
+        this.setState({ debits, debitSum: sum });
     }
 
-    handleAmount = (event) => {
-        if (isNaN(event.target.value)) {
-            alert("Please enter a number")
-        }
-        else {
-            this.setState({ amount: event.target.value });
-        }
-    }
-
-    makeTable = (debits) =>{
+    makeTable = (debits) => {
         let table = [];
         console.log("entered table");
         console.log(debits);
-        for(let i = 0; i < debits.length; i++)
-        {
+        for (let i = 0; i < debits.length; i++) {
             table.push(
                 <tbody>
                     <tr key={debits[i].id}>
@@ -72,27 +70,24 @@ class Debits extends Component {
 
     }
     render() {
-
+        const { debits } = this.state;
+        console.log(debits);
         return (
             <div>
                 <h1>Debits</h1>
                 <AccountBalance accountBalance={this.props.accountBalance} />
                 <br />
-                <form onClick={this.addDebit}>
-                    <input value={this.state.description} onChange={this.handleDescription} placeholder="Enter Description"></input>
-                    <input value={this.state.amount} onChange={this.handleAmount} placeholder="Enter Amount"></input>
-                    <button>Add Debit</button>
+                <form>
+                    <input type="text" value={this.state.description} onChange={this.handleDescription} placeholder="Enter Description"></input>
+                    <input type="number" value={this.state.amount} onChange={this.handleAmount} placeholder="Enter Amount"></input>
+                    <button className="add-debit" onClick={this.addDebit}>Add Debit</button>
                 </form>
                 <br />
-                {this.state.debits.map((data) => {
-                    return (
-                        <div>
-                            <p>{data.description}</p>
-                            <p>{data.amount}</p>
-                            <p>{data.date}</p>
-                        </div>
-                    );
-                })}
+                <table id="data">
+                    <tbody>
+                        {this.makeTable(debits)}
+                    </tbody>
+                </table>
             </div>
         );
     }
