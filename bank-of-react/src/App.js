@@ -5,17 +5,22 @@ import UserProfile from './components/UserProfile';
 import LogIn from './Login';
 import Debits from './components/Debits';
 import Credits from './components/Credits';
+import axios from 'axios';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      accountBalance: 14568.27,
+      accountBalance: 0,
+      creditBalance: 0,
+      debitBalance: 0,
       currentUser: {
         userName: 'joe_shimo',
         memberSince: '07/23/96',
-      }
+      },
+      debits: [],
+      credits: [],
     }
   }
 

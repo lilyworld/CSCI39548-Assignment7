@@ -53,6 +53,7 @@ class Debits extends Component {
     }
 
     addDebit = (event) => {
+        event.preventDefault();
         const debitInfo = this.state.debits;
         const date = new Date().toLocaleDateString("en-US");
         this.setState({ date });
