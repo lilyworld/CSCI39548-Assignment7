@@ -10,9 +10,6 @@ class Credits extends Component {
         this.state = {
             credits: [],
             items: []
-            // description: "",
-            // amount: 0,
-            // date: "",
         }
     }
 
@@ -23,35 +20,26 @@ class Credits extends Component {
         this.setState({ amount: event.target.value });
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({credits: this.props.credits});
+
+        let items = await axios.get("https://moj-api.herokuapp.com/credits");
+        items = items.data
     }
 
-    // async componentDidMount() {
-    //     let credits = await axios.get("https://moj-api.herokuapp.com/credits")
-
-    //     credits = credits.data
-    //     let sum = 0;
-    //     credits.forEach((credit) => {
-    //         sum += credit.amount
-    //     })
-
-    //     this.setState({credits});
-    // }
-
-    makeTable = (credits) => {
+    makeTable = (items) => {
         let table = [];
         console.log("entered table");
-        console.log(credits);
-        for (let i = 0; i < credits.length; i++) {
+        console.log(items);
+        for (let i = 0; i < items.length; i++) {
             table.push(
                 <tbody>
-                    <tr key={credits[i].id}>
+                    <tr key={items[i].id}>
                         <td>
                             <ul>
-                                <td><b>{credits[i].description}</b></td>
-                                <p>Amount: ${credits[i].amount}</p>
-                                <p>Date: {credits[i].date}</p>
+                                <td><b>{items[i].description}</b></td>
+                                <p>Amount: ${items[i].amount}</p>
+                                <p>Date: {items[i].date}</p>
                             </ul>
                         </td>
                     </tr>
@@ -64,7 +52,6 @@ class Credits extends Component {
     addCredit = (event) => {
         event.preventDefault();
         const creditInfo = this.state.credits;
-        const Balance = this.props.accountBalance - parseInt(this.state.amount);
 
         const date = new Date().toLocaleDateString("en-US");
         this.setState({ date });
