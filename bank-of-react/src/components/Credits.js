@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 import AccountBalance from './AccountBalance';
+import {Link} from 'react-router-dom';
 
 class Credits extends Component {
     constructor(props) {
@@ -14,6 +15,13 @@ class Credits extends Component {
         }
     }
 
+    handleDescription = (event) => {
+        this.setState({ description: event.target.value });
+    }
+    handleAmount = (event) => {
+        this.setState({ amount: event.target.value });
+    }
+
     async componentDidMount() {
         let credits = await axios.get("https://moj-api.herokuapp.com/credits")
 
@@ -23,7 +31,7 @@ class Credits extends Component {
             sum += credit.amount
         })
 
-        this.setState({credits, creditBalance: sum});
+        this.setState({credits});
     }
 
     makeTable = (credits) => {
@@ -48,7 +56,7 @@ class Credits extends Component {
         return table;
     }
 
-    onClick = (event) => {
+    addCredit = (event) => {
         event.preventDefault();
         const creditInfo = this.state.credits;
         const Balance = this.props.accountBalance - parseInt(this.state.amount);
@@ -67,6 +75,7 @@ class Credits extends Component {
         return (
             <div>
                 <div className="App-header">
+                    <p><Link to="/userProfile">User Profile</Link> <p><Link to="/debits">Debits</Link></p></p> 
                     <h1>Credits</h1>
                     <AccountBalance accountBalance={this.props.accountBalance}/>
                     <form>
