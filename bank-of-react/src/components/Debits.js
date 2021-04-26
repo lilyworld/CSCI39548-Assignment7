@@ -75,7 +75,7 @@ class Debits extends Component {
         return (
             <div>
                 <h1>Debits</h1>
-                <AccountBalance accountBalance={this.props.accountBalance} />
+                <AccountBalance accountBalance={this.props.accountBalance}  creditBalance={this.props.creditBalance} debitBalance={this.props.debitBalance}/>
                 <p>Debit Balance: {this.state.debitSum}</p>
 
                 <br />

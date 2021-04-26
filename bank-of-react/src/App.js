@@ -24,20 +24,46 @@ class App extends Component {
     }
   }
 
+  async componentDidMount() {
+    let credits = await axios.get("https://moj-api.herokuapp.com/credits")
+    credits = credits.data
+    credits.forEach((credit) => {
+        this.testCredSum(credit.amount)
+    })
+    let debits = await axios.get("https://moj-api.herokuapp.com/debits");
+    debits = debits.data
+    debits.forEach((debit) => {
+      this.testDebSum(debit.amount)
+    })
+      this.setState({ debits, credits, accountBalance:this.state.debitBalance-this.state.creditBalance});
+    }
+
   mockLogIn = (logInInfo) => {
     const newUser = {...this.state.currentUser}
     newUser.userName = logInInfo.userName
     this.setState({currentUser: newUser})
   }
 
+  testCredSum = (sum) => {
+    this.setState({creditBalance:this.state.creditBalance+parseInt(sum)},()=>this.setState({accountBalance:this.state.debitBalance-this.state.creditBalance}))
+  }
+  testDebSum = (sum) => {
+    this.setState({debitBalance:this.state.debitBalance+parseInt(sum)},()=>this.setState({accountBalance:this.state.debitBalance-this.state.creditBalance}))
+  }
+  addNewCred = (newCred) => {
+    let scuffedUpdate = this.state.credits
+    scuffedUpdate.push(newCred)
+    this.setState({credits:scuffedUpdate})
+  }
+
   render() {
-    const HomeComponent = () => (<Home creditSum={this.state.creditSum} debitSum={this.state.debitSum} accountBalance={this.state.accountBalance}/>);
+    const HomeComponent = () => (<Home creditSum={this.state.creditSum} debitSum={this.state.debitSum} accountBalance={this.state.accountBalance} debitBalance={this.state.debitBalance} accountBalance={this.state.accountBalance}/>);
     const UserProfileComponent = () => (
         <UserProfile userName={this.state.currentUser.userName} memberSince={this.state.currentUser.memberSince}  />
     );
     const LogInComponent = () => (<LogIn user={this.state.currentUser} mockLogIn={this.mockLogIn} />)
     const DebitsComponent = () => (<Debits creditBalance={this.state.creditBalance} debitBalance={this.state.debitBalance} accountBalance={this.state.accountBalance}/>)
-    const CreditsComponent = () => (<Credits creditBalance={this.state.creditBalance} debitBalance={this.state.debitBalance} accountBalance={this.state.accountBalance}/>)
+    const CreditsComponent = () => (<Credits addCredit={this.addNewCred} credits={this.state.credits} testCredSum={this.testCredSum} creditBalance={this.state.creditBalance} debitBalance={this.state.debitBalance} accountBalance={this.state.accountBalance}/>)
 
     return (
         <Router>
