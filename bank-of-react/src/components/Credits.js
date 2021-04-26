@@ -63,7 +63,7 @@ class Credits extends Component {
         }
 
         creditInfo.unshift({ description: this.state.description, amount: this.state.amount, date });
-        this.props.testCredSum(this.state.amount);
+        this.props.CredSum(this.state.amount);
         this.props.addCredit(newCred);
         this.setState({ credits: creditInfo });
     }
@@ -74,7 +74,7 @@ class Credits extends Component {
         return (
             <div>
                 <div className="App-header">
-                    <p><Link to="/userProfile">User Profile</Link> <p><Link to="/debits">Debits</Link></p></p> 
+                    <p><Link to="/userProfile">User Profile</Link> <Link to="/debits">Debits</Link></p>
                     <h1>Credits</h1>
                     <AccountBalance accountBalance={this.props.accountBalance} creditBalance={this.props.creditBalance} debitBalance={this.props.debitBalance}/>
                     <form>
