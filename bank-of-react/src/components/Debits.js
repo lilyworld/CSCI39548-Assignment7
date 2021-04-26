@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import AccountBalance from "./AccountBalance";
 import { Redirect } from 'react-router-dom'
+import {Link} from 'react-router-dom';
 
 class Debits extends Component {
 
@@ -9,11 +10,8 @@ class Debits extends Component {
         super(props)
         this.state =
         {
-            debitSum: 0,
-            description: "",
-            amount: null,
-            date: "",
-            debits: [], //creates an array to hold debit info
+            debits: [],
+            items: []
         }
     }
 
@@ -25,29 +23,26 @@ class Debits extends Component {
         this.setState({ amount: event.target.value });
     }
 
-    componentDidMount = async () => {
-        let debits = await axios.get("https://moj-api.herokuapp.com/debits");
-        debits = debits.data
-        let sum = 0;
-        debits.forEach((debit) => {
-            sum += debit.amount
-        })
-        this.setState({ debits, debitSum: sum });
+    async componentDidMount() {
+        this.setState({debits: this.props.debits});
+
+        let items = await axios.get("https://moj-api.herokuapp.com/debits");
+        items = items.data
     }
 
-    makeTable = (debits) => {
+    makeTable = (items) => {
         let table = [];
         console.log("entered table");
-        console.log(debits);
-        for (let i = 0; i < debits.length; i++) {
+        console.log(items);
+        for (let i = 0; i < items.length; i++) {
             table.push(
                 <tbody>
-                    <tr key={debits[i].id}>
+                    <tr key={items[i].id}>
                         <td>
                             <ul>
-                                <td><b>{debits[i].description}</b></td>
-                                <p>Amount: ${debits[i].amount}</p>
-                                <p>Date: {debits[i].date}</p>
+                                <td><b>{items[i].description}</b></td>
+                                <p>Amount: ${items[i].amount}</p>
+                                <p>Date: {items[i].date}</p>
                             </ul>
                         </td>
                     </tr>
@@ -59,23 +54,29 @@ class Debits extends Component {
 
     addDebit = (event) => {
         const debitInfo = this.state.debits;
-        const Balance = this.props.accountBalance - parseInt(this.state.amount);
-
         const date = new Date().toLocaleDateString("en-US");
         this.setState({ date });
 
+        let newDeb = {
+            description: this.state.description,
+            amount: this.state.amount,
+            date
+        }
+
         debitInfo.unshift({ description: this.state.description, amount: this.state.amount, date });
-
+        this.props.DebSum(this.state.amount);
+        this.props.addDeb(newDeb);
         this.setState({ debits: debitInfo });
-
     }
+
     render() {
         const { debits } = this.state;
         console.log(debits);
         return (
             <div>
+                <p><Link to="/userProfile">User Profile</Link> <Link to="/credits">Credits</Link></p>
                 <h1>Debits</h1>
-                <AccountBalance accountBalance={this.props.accountBalance} />
+                <AccountBalance accountBalance={this.props.accountBalance}  creditBalance={this.props.creditBalance} debitBalance={this.props.debitBalance}/>
                 <br />
                 <form>
                     <input type="text" value={this.state.description} onChange={this.handleDescription} placeholder="Enter Description"></input>
