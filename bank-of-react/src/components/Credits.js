@@ -77,7 +77,7 @@ class Credits extends Component {
                 <div className="App-header">
                     <p><Link to="/userProfile">User Profile</Link> <p><Link to="/debits">Debits</Link></p></p> 
                     <h1>Credits</h1>
-                    <AccountBalance accountBalance={this.props.accountBalance}/>
+                    <AccountBalance accountBalance={this.props.accountBalance} creditBalance={this.props.creditBalance} debitBalance={this.props.debitBalance}/>
                     <form>
                         <input type="text" value={this.state.description} onChange={this.handleDescription} placeholder="Enter Description"></input>
                         <input type="number" value={this.state.amount} onChange={this.handleAmount} placeholder="Enter Amount"></input>

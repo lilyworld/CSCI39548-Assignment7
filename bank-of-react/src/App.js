@@ -5,6 +5,7 @@ import UserProfile from './components/UserProfile';
 import LogIn from './Login';
 import Debits from './components/Debits';
 import Credits from './components/Credits';
+import axios from 'axios';
 
 class App extends Component {
 
