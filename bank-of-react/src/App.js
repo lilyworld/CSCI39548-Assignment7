@@ -12,14 +12,14 @@ class App extends Component {
     super(props);
     this.state = {
       accountBalance: 0,
+      creditBalance: 0,
+      debitBalance: 0,
       currentUser: {
         userName: 'joe_shimo',
         memberSince: '07/23/96',
       },
       debits: [],
       credits: [],
-      creditBalance: 0,
-      debitBalance: 0
     }
   }
 
