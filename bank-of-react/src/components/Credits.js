@@ -9,6 +9,7 @@ class Credits extends Component {
         super(props);
         this.state = {
             credits: [],
+            items: []
             // description: "",
             // amount: 0,
             // date: "",
@@ -22,17 +23,21 @@ class Credits extends Component {
         this.setState({ amount: event.target.value });
     }
 
-    async componentDidMount() {
-        let credits = await axios.get("https://moj-api.herokuapp.com/credits")
-
-        credits = credits.data
-        let sum = 0;
-        credits.forEach((credit) => {
-            sum += credit.amount
-        })
-
-        this.setState({credits});
+    componentDidMount() {
+        this.setState({credits: this.props.credits});
     }
+
+    // async componentDidMount() {
+    //     let credits = await axios.get("https://moj-api.herokuapp.com/credits")
+
+    //     credits = credits.data
+    //     let sum = 0;
+    //     credits.forEach((credit) => {
+    //         sum += credit.amount
+    //     })
+
+    //     this.setState({credits});
+    // }
 
     makeTable = (credits) => {
         let table = [];
@@ -64,8 +69,15 @@ class Credits extends Component {
         const date = new Date().toLocaleDateString("en-US");
         this.setState({ date });
 
-        creditInfo.unshift({ description: this.state.description, amount: this.state.amount, date });
+        let newCred = {
+            description: this.state.description,
+            amount: this.state.amount,
+            date
+        }
 
+        creditInfo.unshift({ description: this.state.description, amount: this.state.amount, date });
+        this.props.testCredSum(this.state.amount);
+        this.props.addCredit(newCred);
         this.setState({ credits: creditInfo });
     }
 
